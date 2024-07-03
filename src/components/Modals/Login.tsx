@@ -1,8 +1,9 @@
 import authModalState from "@/atoms/authModalAtom";
 import { auth } from "@/firebase/firebase";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSignInWithEmailAndPassword } from "react-firebase-hooks/auth";
+import { toast } from "react-toastify";
 import { useSetRecoilState } from "recoil";
 
 type LoginProps = {};
@@ -32,9 +33,18 @@ const Login: React.FC<LoginProps> = () => {
       if (!newUser) return;
       router.push("/");
     } catch (error: any) {
-      alert(error);
+      console.log(error);
     }
   };
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message, {
+        position: "top-right",
+        autoClose: 5000,
+        theme: "dark",
+      });
+    }
+  }, [error]);
 
   return (
     <form className="space-y-6 px-6 pb-4" onSubmit={handleLoginForm}>
