@@ -1,4 +1,4 @@
-import { problems } from "@/Problems/problem";
+import { problemsdata } from "@/ProblemsData/problemdata";
 import Link from "next/link";
 import React, { useState } from "react";
 import { BsCheckCircle } from "react-icons/bs";
@@ -15,7 +15,7 @@ const Problemtable: React.FC<ProblemtableProps> = () => {
   return (
     <>
       <tbody className="text-white text-sm">
-        {problems?.map((item, index) => {
+        {problemsdata?.map((item, index) => {
           return (
             <tr
               key={item.id}
@@ -26,7 +26,7 @@ const Problemtable: React.FC<ProblemtableProps> = () => {
               </td>
               <td className="px-6 py-4">
                 <Link
-                  href={`/problem-${item.id}`}
+                  href={`/problems/${item.id}`}
                   className="hover:text-blue-500 cursor-pointer"
                 >
                   {item.title}

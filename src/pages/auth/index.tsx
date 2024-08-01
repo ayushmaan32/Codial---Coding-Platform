@@ -9,7 +9,7 @@ import { useRouter } from "next/router";
 
 type AuthProps = {};
 
-const index: React.FC<AuthProps> = () => {
+const AuthPage: React.FC<AuthProps> = () => {
   const authModal = useRecoilValue(authModalState);
   const [user, loading, error] = useAuthState(auth);
   const [pageLoading, setPageLoading] = useState(true);
@@ -36,4 +36,4 @@ const index: React.FC<AuthProps> = () => {
     </div>
   );
 };
-export default index;
+export default AuthPage;

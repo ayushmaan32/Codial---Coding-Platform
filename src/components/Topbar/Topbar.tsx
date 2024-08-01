@@ -7,10 +7,16 @@ import Logout from "../Logout/Logout";
 import { useSetRecoilState } from "recoil";
 import authModalState from "@/atoms/authModalAtom";
 import Image from "next/image";
+import { FaChevronLeft } from "react-icons/fa";
+import { FaChevronRight } from "react-icons/fa";
+import { BsList } from "react-icons/bs";
+import Timer from "../Timer/Timer";
 
-type TopbarProps = {};
+type TopbarProps = {
+  problemPage?: boolean;
+};
 
-const Topbar: React.FC<TopbarProps> = () => {
+const Topbar: React.FC<TopbarProps> = ({ problemPage }) => {
   const [user, loading] = useAuthState(getAuth(app));
   const setAuthModalState = useSetRecoilState(authModalState);
   return (
@@ -22,10 +28,37 @@ const Topbar: React.FC<TopbarProps> = () => {
           <Image src="/logo-full.png" alt="Logo" height={100} width={100} />
         </Link>
 
+        {problemPage && (
+          <div className="flex items-center gap-4 justify-center flex-1">
+            <div
+              className="flex items-center justify-center bg-dark-fill-3 rounded hover:bg-dark-fill-2 h-8 w-8 cursor-pointer '
+            "
+            >
+              <FaChevronLeft />
+            </div>
+            <Link
+              href={"/"}
+              className="flex gap-2 items-center font-medium max-w-[170px] text-dark-gray-8 cursor-pointer"
+            >
+              <div>
+                <BsList />
+              </div>
+              <p>Problem list</p>
+            </Link>
+
+            <div
+              className="flex items-center justify-center bg-dark-fill-3 rounded hover:bg-dark-fill-2 h-8 w-8 cursor-pointer'
+            "
+            >
+              <FaChevronRight />
+            </div>
+          </div>
+        )}
+
         <div className="flex items-center space-x-4 flex-1 justify-end">
           <div>
             <a
-              href="https://www.buymeacoffee.com/burakorkmezz"
+              href=""
               target="_blank"
               rel="noreferrer"
               className="bg-dark-fill-3 py-1.5 px-3 cursor-pointer rounded text-brand-orange hover:bg-dark-fill-2"
@@ -33,6 +66,7 @@ const Topbar: React.FC<TopbarProps> = () => {
               Premium
             </a>
           </div>
+          {problemPage && <Timer />}
           {!user && !loading && (
             <Link
               href="/auth"

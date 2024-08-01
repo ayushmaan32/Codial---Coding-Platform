@@ -1,4 +1,4 @@
-export type Problem = {
+export type ProblemData = {
   id: string;
   title: string;
   difficulty: string;
@@ -7,14 +7,14 @@ export type Problem = {
   videoId?: string;
 };
 
-export const problems: Problem[] = [
+export const problemsdata: ProblemData[] = [
   {
     id: "two-sum",
     title: "Two Sum",
     difficulty: "Easy",
     category: "Array",
     order: 1,
-    videoId: "8-k1C6ehKuw",
+    videoId: "UXDSeD9mN-k",
   },
   {
     id: "reverse-linked-list",
@@ -22,7 +22,7 @@ export const problems: Problem[] = [
     difficulty: "Hard",
     category: "Linked List",
     order: 2,
-    videoId: "",
+    videoId: "D2vI2DNJGd8",
   },
   {
     id: "jump-game",
