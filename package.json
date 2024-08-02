@@ -10,9 +10,12 @@
     "build-css": "tailwindcss build -i ./src/styles/globals.css -o ./dist/css/output.css"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.2",
     "@types/node": "20.14.9",
     "@types/react": "18.3.3",
     "@types/react-dom": "18.3.0",
+    "@uiw/codemirror-theme-vscode": "^4.23.0",
+    "@uiw/react-codemirror": "^4.23.0",
     "eslint": "8.57.0",
     "eslint-config-next": "13.2.4",
     "firebase": "^10.12.2",

@@ -1,14 +1,20 @@
 import React from "react";
 import Split from "react-split";
 import ProblemDescription from "./ProblemDescription/ProblemDescription";
+import PlayGround from "./PlayGround/PlayGround";
 
 type WorkSpaceProps = {};
 
 const WorkSpace: React.FC<WorkSpaceProps> = () => {
   return (
-    <Split className="split" direction="horizontal" minSize={0}>
+    <Split
+      className="split"
+      direction="horizontal"
+      minSize={0}
+      sizes={[33, 77]}
+    >
       <ProblemDescription />
-      <div>editor</div>
+      <PlayGround />
     </Split>
   );
 };
