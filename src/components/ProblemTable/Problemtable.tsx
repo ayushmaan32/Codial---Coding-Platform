@@ -1,4 +1,3 @@
-import { problemsdata } from "@/ProblemsData/problemdata";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { BsCheckCircle } from "react-icons/bs";

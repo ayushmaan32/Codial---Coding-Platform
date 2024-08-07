@@ -42,7 +42,7 @@ const Signup: React.FC<SignupProps> = () => {
       const newUserData = {
         uid: newUser?.user.uid,
         email: newUser?.user?.email,
-        name: newUser?.user?.displayName,
+        name: input.name,
         likedProblems: [],
         dislikedProbems: [],
         solvedProblems: [],
