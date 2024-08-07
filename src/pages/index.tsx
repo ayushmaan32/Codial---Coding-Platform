@@ -12,7 +12,7 @@ export default function Home() {
         {/* <h1>List of Questions</h1> */}
         {loadingProblem && (
           <div className="relative mx-auto px-6 pb-10 w-full animate-pulse">
-            {[...Array(10)].map((_, idx) => (
+            {[...Array(5)].map((_, idx) => (
               <LoadingSkeletonHome key={idx} />
             ))}
           </div>
