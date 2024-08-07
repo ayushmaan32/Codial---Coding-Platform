@@ -3,28 +3,19 @@ import * as React from "react";
 import { doc, setDoc } from "firebase/firestore";
 export interface IAdminProps {}
 
-export type formQuestion = {
-  id: string;
-  title: string;
-  category: string;
-  order: number;
-  difficulty: string;
-  videoId: string;
-  likes: 0;
-  dislikes: 0;
-};
-
 export default function Admin(props: IAdminProps) {
-  const [inputs, setInputs] = React.useState<formQuestion>({
+  const [inputs, setInputs] = React.useState({
     id: "",
     title: "",
     category: "",
-    order: 0,
+    order: "",
     difficulty: "",
     videoId: "",
     likes: 0,
     dislikes: 0,
   });
+  // console.log("inputs", inputs);
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputs({
       ...inputs,
@@ -34,8 +25,21 @@ export default function Admin(props: IAdminProps) {
   console.log(inputs);
   const handleFormSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // const newFormData;
-    await setDoc(doc(firestore, "problems", inputs.id), inputs);
+    const newFormData = {
+      ...inputs,
+      order: parseInt(inputs.order),
+    };
+    await setDoc(doc(firestore, "problems", inputs.id), newFormData);
+    setInputs({
+      id: "",
+      title: "",
+      category: "",
+      order: "",
+      difficulty: "",
+      videoId: "",
+      likes: 0,
+      dislikes: 0,
+    });
   };
 
   return (

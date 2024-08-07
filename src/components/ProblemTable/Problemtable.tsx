@@ -1,21 +1,30 @@
 import { problemsdata } from "@/ProblemsData/problemdata";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsCheckCircle } from "react-icons/bs";
 import { AiFillYoutube } from "react-icons/ai";
 import YouTube from "react-youtube";
 import { IoClose } from "react-icons/io5";
-type ProblemtableProps = {};
+import { collection, query, getDocs, orderBy } from "firebase/firestore";
+import { firestore } from "@/firebase/firebase";
+import { DBProblem } from "@/utils/types/problem.";
+type ProblemtableProps = {
+  setLoadingProblem: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
-const Problemtable: React.FC<ProblemtableProps> = () => {
+const Problemtable: React.FC<ProblemtableProps> = ({ setLoadingProblem }) => {
   const [youtubePlayer, setYoutubePlayer] = useState({
     isOpen: false,
     videoId: "",
   });
+
+  const problems = useGetProblems(setLoadingProblem);
+  // console.log(typeof problems, "problems", problems);
+
   return (
     <>
       <tbody className="text-white text-sm">
-        {problemsdata?.map((item, index) => {
+        {problems?.map((item, index) => {
           return (
             <tr
               key={item.id}
@@ -95,3 +104,35 @@ const Problemtable: React.FC<ProblemtableProps> = () => {
 };
 
 export default Problemtable;
+
+const useGetProblems = (
+  setLoadingProblem: React.Dispatch<React.SetStateAction<boolean>>
+) => {
+  const [problems, setProblems] = useState<DBProblem[]>([]);
+  useEffect(() => {
+    setLoadingProblem(true);
+    const getProblems = async () => {
+      const q = query(
+        collection(firestore, "problems"),
+        orderBy("order", "asc")
+      );
+
+      const querySnapshot = await getDocs(q);
+      const temp: DBProblem[] = [];
+
+      querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        temp.push({
+          id: doc.id,
+          ...doc.data(),
+        } as DBProblem);
+        // console.log(doc.id, " => ", doc.data());
+      });
+      setProblems(temp);
+      setLoadingProblem(false);
+    };
+
+    getProblems();
+  }, [setLoadingProblem]);
+  return problems;
+};
