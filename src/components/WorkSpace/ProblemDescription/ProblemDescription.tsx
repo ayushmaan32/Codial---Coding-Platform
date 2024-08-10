@@ -1,16 +1,24 @@
 import { DBProblem, Problem } from "@/utils/types/problem.";
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { AiFillDislike, AiFillLike } from "react-icons/ai";
+import { AiFillDislike, AiFillLike, AiFillStar } from "react-icons/ai";
 import { BsCheck2Circle } from "react-icons/bs";
 import { TiStarOutline } from "react-icons/ti";
-import { doc, getDoc, runTransaction } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  getDoc,
+  runTransaction,
+  updateDoc,
+} from "firebase/firestore";
 import { auth, firestore } from "@/firebase/firebase";
 
 import CircleSkeleton from "@/components/LoadingSkeleton/CircleSkeleton";
 import RectangleSkeleton from "@/components/LoadingSkeleton/RectangleSkeleton";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { toast } from "react-toastify";
+import { updateSourceFile } from "typescript";
 
 type ProblemDescriptionProps = {
   problem: Problem;
@@ -230,6 +238,43 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
     }
   };
 
+  const handleStarredClick = async () => {
+    try {
+      if (!user) {
+        toast.error("You are not allowed to Star,Login Please!", {
+          position: "top-right",
+          theme: "dark",
+        });
+        return;
+      }
+      if (updating) return;
+      setUpdating(true);
+      if (starred) {
+        const userRef = doc(firestore, "users", user!.uid);
+        await updateDoc(userRef, {
+          starredProblems: arrayRemove(problem.id),
+        });
+        setUserData((prev) => ({
+          ...prev,
+          starred: false,
+        }));
+      } else {
+        const userRef = doc(firestore, "users", user!.uid);
+        await updateDoc(userRef, {
+          starredProblems: arrayUnion(problem.id),
+        });
+        setUserData((prev) => ({
+          ...prev,
+          starred: true,
+        }));
+      }
+      setUpdating(false);
+    } catch (error) {
+      toast.error(`${error}`, { position: "top-right", theme: "dark" });
+      console.error(error);
+    }
+  };
+
   return (
     <div className="bg-dark-layer-1">
       {/* TAB */}
@@ -296,8 +341,13 @@ const ProblemDescription: React.FC<ProblemDescriptionProps> = ({ problem }) => {
                     {!loading && currentProblem?.dislikes}
                   </span>
                 </div>
-                <div className="cursor-pointer hover:bg-dark-fill-3  rounded p-[3px]  ml-4 text-xl transition-colors duration-200 text-green-s text-dark-gray-6 ">
-                  <TiStarOutline />
+                <div
+                  className="cursor-pointer hover:bg-dark-fill-3  rounded p-[3px]  ml-4 text-xl transition-colors duration-200 text-green-s text-dark-gray-6 "
+                  onClick={handleStarredClick}
+                >
+                  {/* <TiStarOutline /> */}
+                  {starred && <AiFillStar className="text-dark-yellow" />}
+                  {!starred && <TiStarOutline />}
                 </div>
               </div>
             )}
