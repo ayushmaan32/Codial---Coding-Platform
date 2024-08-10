@@ -2,9 +2,13 @@ import Topbar from "@/components/Topbar/Topbar";
 import ProblemTable from "@/components/ProblemTable/Problemtable";
 import { useState } from "react";
 import LoadingSkeletonHome from "@/components/LoadingSkeleton/LoadingSkeletonHome";
+import useHasMounted from "@/hooks/useHasMounted";
 
 export default function Home() {
   const [loadingProblem, setloadingProblem] = useState<boolean>(true);
+  const hasMounted = useHasMounted();
+
+  if (!hasMounted) return null;
   return (
     <>
       <main className="bg-dark-layer-2 min-h-screen">
