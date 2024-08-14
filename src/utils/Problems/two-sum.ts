@@ -1,7 +1,7 @@
 import assert from "assert";
 import { Problem } from "../types/problem.";
 
-const starterCodeTwoSum = `function TwoSum(){
+const starterCodeTwoSum = `function TwoSum(nums,target){
   // Write your code here.
 
 };`;
@@ -21,7 +21,7 @@ const handlefunctionTwoSum = (fn: any): boolean => {
     const answer = [
       [0, 1],
       [1, 2],
-      [1, 1],
+      [0, 1],
     ];
 
     // loop all tests to check if the user's code is correct
@@ -41,7 +41,7 @@ export const twoSumProblem: Problem = {
   id: "two-sum",
   title: "1. Two Sum",
   problemStatement: ` <p class="mt-3">
-                Given an array of integers <code>nums</code> and an integer{" "}
+                Given an array of integers <code>nums</code> and an integer
                 <code>target</code>, return
                 <em>
                   indices of the two numbers such that they add up to
@@ -49,7 +49,7 @@ export const twoSumProblem: Problem = {
                 <code>target</code>.
               </p>
               <p class="mt-3">
-                You may assume that each input would have{" "}
+                You may assume that each input would have
                 <strong>exactly one solution</strong>, and you may not use
                 thesame element twice.
               </p>

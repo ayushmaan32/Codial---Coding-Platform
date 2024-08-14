@@ -1,20 +1,83 @@
-import React, { useState } from "react";
+import React, { SetStateAction, useState } from "react";
 import PreferenceNav from "./PreferenceNav/PreferenceNav";
 import Split from "react-split";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
 import { vscodeDark } from "@uiw/codemirror-theme-vscode";
 import { Problem } from "@/utils/types/problem.";
+import EditorFooter from "./EditorFooter";
+import { problemList } from "@/utils/Problems";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth, firestore } from "@/firebase/firebase";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+import { arrayUnion, doc, updateDoc } from "firebase/firestore";
 
 type PlayGroundProps = {
   problem: Problem;
+  setSuccess: React.Dispatch<SetStateAction<boolean>>;
+  setSolved: React.Dispatch<SetStateAction<boolean>>;
 };
 
-const PlayGround: React.FC<PlayGroundProps> = ({ problem }) => {
+const PlayGround: React.FC<PlayGroundProps> = ({
+  problem,
+  setSuccess,
+  setSolved,
+}) => {
   const [activeId, setActiveId] = useState<number>(0);
+  const [userCode, setUserCode] = useState<string>(problem.starterCode);
+  const [user] = useAuthState(auth);
+  const {
+    query: { pid },
+  } = useRouter();
+
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error("Please login to submit!", {
+        position: "top-right",
+        theme: "dark",
+      });
+      return;
+    }
+
+    try {
+      const cb = new Function(`return ${userCode}`)();
+      const handler = problemList[pid as string].handlefunction;
+
+      if (typeof handler === "function") {
+        const result = handler(cb);
+
+        if (result) {
+          toast.success("Congrats! All test case passed", {
+            position: "top-center",
+            theme: "dark",
+            autoClose: 4000,
+          });
+          setSuccess(true);
+          setTimeout(() => {
+            setSuccess(false);
+          }, 4200);
+        }
+      }
+
+      const userRef = doc(firestore, "users", user.uid);
+      await updateDoc(userRef, {
+        solvedProblems: arrayUnion(pid),
+      });
+      setSolved(true);
+    } catch (error: any) {
+      console.log(error.message);
+      toast.error(error);
+    }
+  };
+
+  const handleEditorChange = (value: string) => {
+    console.log("vlue", value);
+    setUserCode(value);
+  };
   return (
     <>
-      <div className="flex flex-col bg-dark-layer-1 overflow-x-hidden">
+      <div className="flex flex-col bg-dark-layer-1 relative overflow-x-hidden">
         <PreferenceNav />
         <Split
           className="h-[calc(100vh-94px)]"
@@ -22,11 +85,12 @@ const PlayGround: React.FC<PlayGroundProps> = ({ problem }) => {
           minSize={60}
           sizes={[60, 40]}
         >
-          <div className="w-full -z-40">
+          <div className="w-full overflow-auto">
             <CodeMirror
               value={problem?.starterCode}
               extensions={[javascript({ jsx: true })]}
               theme={vscodeDark}
+              onChange={handleEditorChange}
             />
           </div>
 
@@ -76,6 +140,7 @@ const PlayGround: React.FC<PlayGroundProps> = ({ problem }) => {
             </div>
           </div>
         </Split>
+        <EditorFooter handleSubmit={handleSubmit} />
       </div>
     </>
   );
