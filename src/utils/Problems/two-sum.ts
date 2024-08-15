@@ -45,7 +45,7 @@ export const twoSumProblem: Problem = {
                 <code>target</code>, return
                 <em>
                   indices of the two numbers such that they add up to
-                </em>{" "}
+                </em>
                 <code>target</code>.
               </p>
               <p class="mt-3">
@@ -88,5 +88,5 @@ export const twoSumProblem: Problem = {
   order: 1,
   starterCode: starterCodeTwoSum,
   handlefunction: handlefunctionTwoSum,
-  startFunctionName: "",
+  startFunctionName: "function TwoSum(",
 };

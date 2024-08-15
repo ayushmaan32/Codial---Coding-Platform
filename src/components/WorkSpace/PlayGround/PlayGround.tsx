@@ -1,4 +1,4 @@
-import React, { SetStateAction, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import PreferenceNav from "./PreferenceNav/PreferenceNav";
 import Split from "react-split";
 import CodeMirror from "@uiw/react-codemirror";
@@ -12,6 +12,7 @@ import { auth, firestore } from "@/firebase/firebase";
 import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 import { arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { log } from "console";
 
 type PlayGroundProps = {
   problem: Problem;
@@ -25,7 +26,7 @@ const PlayGround: React.FC<PlayGroundProps> = ({
   setSolved,
 }) => {
   const [activeId, setActiveId] = useState<number>(0);
-  const [userCode, setUserCode] = useState<string>(problem.starterCode);
+  let [userCode, setUserCode] = useState<string>(problem.starterCode);
   const [user] = useAuthState(auth);
   const {
     query: { pid },
@@ -41,6 +42,7 @@ const PlayGround: React.FC<PlayGroundProps> = ({
     }
 
     try {
+      userCode = userCode.slice(userCode.indexOf(problem.startFunctionName));
       const cb = new Function(`return ${userCode}`)();
       const handler = problemList[pid as string].handlefunction;
 
@@ -67,13 +69,30 @@ const PlayGround: React.FC<PlayGroundProps> = ({
       setSolved(true);
     } catch (error: any) {
       console.log(error.message);
-      toast.error(error);
+      if (error)
+        toast.error(error.message, {
+          position: "bottom-right",
+          theme: "dark",
+          autoClose: false,
+        });
     }
   };
 
+  useEffect(() => {
+    const code = localStorage.getItem(`code-${pid}`);
+    // console.log(code);
+
+    if (user) {
+      setUserCode(code ? JSON.parse(code) : problem.starterCode);
+    } else {
+      setUserCode(problem.starterCode);
+    }
+  }, [pid, user, problem.starterCode]);
+
   const handleEditorChange = (value: string) => {
-    console.log("vlue", value);
+    // console.log("vlue", value);
     setUserCode(value);
+    localStorage.setItem(`code-${pid}`, JSON.stringify(value));
   };
   return (
     <>
@@ -87,7 +106,7 @@ const PlayGround: React.FC<PlayGroundProps> = ({
         >
           <div className="w-full overflow-auto">
             <CodeMirror
-              value={problem?.starterCode}
+              value={userCode}
               extensions={[javascript({ jsx: true })]}
               theme={vscodeDark}
               onChange={handleEditorChange}

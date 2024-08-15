@@ -83,6 +83,6 @@ export const search2DMatrix: Problem = {
   `,
   starterCode: starterCodeSearch2DMatrixJS,
   handlefunction: search2DMatrixHandler,
-  startFunctionName: "function searchMatrix",
+  startFunctionName: "function searchMatrix(",
   order: 5,
 };

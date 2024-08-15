@@ -75,7 +75,7 @@ const starterCodeReverseLinkedList = `/**
  * @param {ListNode} head
  * @return {ListNode}
  */
-var reverseList = function(head) {
+function reverseLinkedList(head) {
     
 };`;
 
@@ -112,5 +112,5 @@ export const reverseLinkedList: Problem = {
   order: 2,
   starterCode: starterCodeReverseLinkedList,
   handlefunction: reverseLinkedListHandler,
-  startFunctionName: "",
+  startFunctionName: "function reverseLinkedList(",
 };
