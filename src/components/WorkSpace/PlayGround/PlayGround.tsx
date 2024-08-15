@@ -79,7 +79,7 @@ const PlayGround: React.FC<PlayGroundProps> = ({
   };
 
   useEffect(() => {
-    const code = localStorage.getItem(`code-${pid}`);
+    const code = localStorage.getItem(`code-${user?.uid}-${pid}`);
     // console.log(code);
 
     if (user) {
@@ -92,7 +92,7 @@ const PlayGround: React.FC<PlayGroundProps> = ({
   const handleEditorChange = (value: string) => {
     // console.log("vlue", value);
     setUserCode(value);
-    localStorage.setItem(`code-${pid}`, JSON.stringify(value));
+    localStorage.setItem(`code-${user?.uid}-${pid}`, JSON.stringify(value));
   };
   return (
     <>
