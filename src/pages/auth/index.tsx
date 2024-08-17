@@ -25,12 +25,12 @@ const AuthPage: React.FC<AuthProps> = () => {
   }, [user, router, loading]);
   if (pageLoading) return null;
   return (
-    <div className="bg-gradient-to-b from-gray-500 to-black h-screen relative">
+    <div className="bg-gradient-to-b from-gray-500 to-black h-screen relative select-none">
       <div className="max-w-7xl mx-auto">
         <Navbar />
       </div>
       <div className="flex items-center justify-center select-none pointer-events-none">
-        <img src="/hero.png" alt="img" />
+        <img src="/hero.png" alt="img" loading="lazy" />
       </div>
       {authModal.isOpen && <AuthModal />}
     </div>

@@ -4,9 +4,17 @@ import { BsCheckCircle } from "react-icons/bs";
 import { AiFillYoutube } from "react-icons/ai";
 import YouTube from "react-youtube";
 import { IoClose } from "react-icons/io5";
-import { collection, query, getDocs, orderBy } from "firebase/firestore";
-import { firestore } from "@/firebase/firebase";
+import {
+  collection,
+  query,
+  getDocs,
+  orderBy,
+  doc,
+  getDoc,
+} from "firebase/firestore";
+import { auth, firestore } from "@/firebase/firebase";
 import { DBProblem } from "@/utils/types/problem.";
+import { useAuthState } from "react-firebase-hooks/auth";
 type ProblemtableProps = {
   setLoadingProblem: React.Dispatch<React.SetStateAction<boolean>>;
 };
@@ -18,6 +26,9 @@ const Problemtable: React.FC<ProblemtableProps> = ({ setLoadingProblem }) => {
   });
 
   const problems = useGetProblems(setLoadingProblem);
+  const solvedList = useGetSolveProblems();
+  // console.log(solvedList);
+
   // console.log(typeof problems, "problems", problems);
 
   return (
@@ -30,7 +41,9 @@ const Problemtable: React.FC<ProblemtableProps> = ({ setLoadingProblem }) => {
               className={`${index % 2 == 1 ? "bg-dark-layer-1" : ""}`}
             >
               <td className="px-2 py-4  font-medium whitespace-nowrap text-dark-green-s">
-                <BsCheckCircle fontSize={18} width={18} />
+                {solvedList.includes(item.id) ? (
+                  <BsCheckCircle fontSize={18} width={18} />
+                ) : null}
               </td>
               <td className="px-6 py-4">
                 <Link
@@ -135,3 +148,23 @@ const useGetProblems = (
   }, [setLoadingProblem]);
   return problems;
 };
+
+function useGetSolveProblems() {
+  const [solvedList, setSolvedList] = useState<String[]>([]);
+  const [user] = useAuthState(auth);
+
+  useEffect(() => {
+    const getSolvedList = async () => {
+      const userRef = doc(firestore, "users", user!.uid);
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        setSolvedList(userDoc.data().solvedProblems);
+      }
+    };
+
+    if (!user) return;
+    getSolvedList();
+  }, [user]);
+  return solvedList;
+}
