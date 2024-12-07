@@ -9,8 +9,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
       <Head>
-        <title>Leetcode clone</title>
-        <meta name="description" content="a clone leetcode app" />
+        <title>Codial - Coding Platform</title>
+        <meta name="description" content="a coding platform app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
