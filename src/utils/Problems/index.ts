@@ -1,5 +1,6 @@
 import { Problem } from "../types/problem.";
 import { jumpGame } from "./jump-game";
+import { palindromNumber } from "./palindrome";
 import { reverseLinkedList } from "./reverse-linked-list";
 import { search2DMatrix } from "./search-a-2d-matrix";
 import { twoSumProblem } from "./two-sum";
@@ -15,4 +16,5 @@ export const problemList: problemMapType = {
   "reverse-linked-list": reverseLinkedList,
   "search-a-2d-matrix": search2DMatrix,
   "valid-parentheses": validParentheses,
+  "palindrome-number": palindromNumber,
 };

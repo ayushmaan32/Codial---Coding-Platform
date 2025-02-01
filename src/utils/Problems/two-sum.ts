@@ -51,7 +51,7 @@ export const twoSumProblem: Problem = {
               <p class="mt-3">
                 You may assume that each input would have
                 <strong>exactly one solution</strong>, and you may not use
-                thesame element twice.
+                the same element twice.
               </p>
               <p class="mt-3">You can return the answer in any order.</p>`,
   examples: [
